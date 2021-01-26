@@ -1,5 +1,5 @@
 import './App.css';
-
+import { useEffect, useState } from 'react';
 
 
 function App() {
@@ -8,29 +8,37 @@ function App() {
       <h1>Github Users</h1>
       <hr />
       <div className="row">
-        <CoursesList />
+        <UsersList />
       </div>
     </div>
   );
 }
 
-function CoursesList() {
-
+function UsersList() {
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+      const loadData = async () => {
+      const response = await fetch("https://api.github.com/users");
+      const users = await response.json();
+      setUsers(users);
+    };
+    loadData()
+  }, [])
   return users.map(function (user) {
     return (
       <div key={user.id} className="col-3 my-1">
         <div className="card" >
           <div className="row no-gutters">
-            <div class="col-md-4">
-              <img src={user.avatar_url} className="img-fluid" />
+            <div className="col-md-4">
+              <img src={user.avatar_url} className="img-fluid p-1" alt="user avatar"/>
             </div>
             <div className="col-md-8">
               <div className="card-header">
                 <h5 className="h5"><strong>{user.login}</strong></h5>
               </div>
               <div className="card-body">
-                <div className="card-text">Github: <a href={user.html_url} target="_blank">{user.html_url}</a></div>
-                <a href="#" className="btn btn-success d-flex justify-content-center my-1">Repositorios</a>
+                <div className="card-text">Github: <a href={user.html_url} target="_blank" rel="noreferrer">{user.html_url}</a></div>
+                <a href="#" className="btn btn-info d-flex justify-content-center my-1" >Repositorios</a>
               </div>
             </div>
           </div>
@@ -42,7 +50,7 @@ function CoursesList() {
 
 export default App;
 
-const users = [
+/*const users = [
   {
     "login": "mojombo",
     "id": 1,
@@ -163,4 +171,4 @@ const users = [
     "type": "User",
     "site_admin": false
   }
-]
+]*/

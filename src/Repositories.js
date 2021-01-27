@@ -23,7 +23,7 @@ function Repositories() {
     }, [])
     return repos.map(function (repo) {
         return (
-            <div key={repo.id} className="col-3 my-1">
+            <div key={repo.id} className="col-md-3 my-1">
                 <div className="card" >
                     <div className="card-header">
                         <h5 className="h5"><strong>{repo.name}</strong></h5>

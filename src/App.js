@@ -48,13 +48,13 @@ function UsersList() {
   return users.map(function (user) {
     return (
 
-      <div key={user.id} className="col-3 my-2">
+      <div key={user.id} className="col-md-3 my-2">
         <div className="card" >
           <div className="row no-gutters">
-            <div className="col-md-4">
+            <div className="col-md-4 col-6">
               <img src={user.avatar_url} className="img-fluid p-1" alt="user avatar" />
             </div>
-            <div className="col-md-8">
+            <div className="col-md-8 col-6">
               <div className="card-header">
                 <h5 className="h5"><strong>{user.login}</strong></h5>
               </div>

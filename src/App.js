@@ -39,7 +39,7 @@ function UsersList() {
   const [users, setUsers] = useState([]);
   useEffect(() => {
     const loadData = async () => {
-      const response = await fetch("https://api.github.com/users?since=" + id * 15 + "&per_page=15&?access_token=6b99a4bb527758a516be8cbb69d421bfb66ec93");
+      const response = await fetch("https://api.github.com/users?since=" + id * 15 + "&per_page=15");
       const users = await response.json();
       setUsers(users);
     };

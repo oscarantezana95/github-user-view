@@ -15,7 +15,7 @@ function Repositories() {
     const [repos, setRepos] = useState([]);
     useEffect(() => {
         const loadData = async () => {
-            const response = await fetch("https://api.github.com/users/" + user + "/repos?per_page=100&access_token=36b99a4bb527758a516be8cbb69d421bfb66ec93");
+            const response = await fetch("https://api.github.com/users/" + user + "/repos?per_page=100");
             const repos = await response.json();
             setRepos(repos);
         };

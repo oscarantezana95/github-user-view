@@ -1,24 +1,45 @@
 import './App.css';
-import { useEffect, useState } from 'react';
+import {Repositories, User} from './Repositories.js';
+import React, { useEffect, useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useParams
+} from "react-router-dom";
 
 
 function App() {
   return (
     <div className="container-fluid">
-      <h1>Github Users</h1>
+      <a className="h1" href="/">Github Users</a>
       <hr />
       <div className="row">
-        <UsersList />
+        <Router>
+          <Switch>
+            <Route path="/user/:user/repositories">
+              <User />
+              <Repositories />
+            </Route>
+            <Route path={["/:id", "/"]}>
+
+              <UsersList />
+              <Routing />
+
+            </Route>
+          </Switch>
+        </Router>
       </div>
-    </div>
+    </div >
   );
 }
 
 function UsersList() {
+  const { id } = useParams();
   const [users, setUsers] = useState([]);
   useEffect(() => {
-      const loadData = async () => {
-      const response = await fetch("https://api.github.com/users");
+    const loadData = async () => {
+      const response = await fetch("https://api.github.com/users?since=" + id * 15 + "&per_page=15&?access_token=6b99a4bb527758a516be8cbb69d421bfb66ec93");
       const users = await response.json();
       setUsers(users);
     };
@@ -26,11 +47,12 @@ function UsersList() {
   }, [])
   return users.map(function (user) {
     return (
-      <div key={user.id} className="col-3 my-1">
+
+      <div key={user.id} className="col-3 my-2">
         <div className="card" >
           <div className="row no-gutters">
             <div className="col-md-4">
-              <img src={user.avatar_url} className="img-fluid p-1" alt="user avatar"/>
+              <img src={user.avatar_url} className="img-fluid p-1" alt="user avatar" />
             </div>
             <div className="col-md-8">
               <div className="card-header">
@@ -38,7 +60,7 @@ function UsersList() {
               </div>
               <div className="card-body">
                 <div className="card-text">Github: <a href={user.html_url} target="_blank" rel="noreferrer">{user.html_url}</a></div>
-                <a href="#" className="btn btn-info d-flex justify-content-center my-1" >Repositorios</a>
+                <a href={"/user/" + user.login + "/repositories"} className="btn btn-info d-flex justify-content-center my-1" >Repositorios</a>
               </div>
             </div>
           </div>
@@ -48,127 +70,18 @@ function UsersList() {
   });
 }
 
-export default App;
-
-/*const users = [
-  {
-    "login": "mojombo",
-    "id": 1,
-    "node_id": "MDQ6VXNlcjE=",
-    "avatar_url": "https://avatars.githubusercontent.com/u/1?v=4",
-    "gravatar_id": "",
-    "url": "https://api.github.com/users/mojombo",
-    "html_url": "https://github.com/mojombo",
-    "followers_url": "https://api.github.com/users/mojombo/followers",
-    "following_url": "https://api.github.com/users/mojombo/following{/other_user}",
-    "gists_url": "https://api.github.com/users/mojombo/gists{/gist_id}",
-    "starred_url": "https://api.github.com/users/mojombo/starred{/owner}{/repo}",
-    "subscriptions_url": "https://api.github.com/users/mojombo/subscriptions",
-    "organizations_url": "https://api.github.com/users/mojombo/orgs",
-    "repos_url": "https://api.github.com/users/mojombo/repos",
-    "events_url": "https://api.github.com/users/mojombo/events{/privacy}",
-    "received_events_url": "https://api.github.com/users/mojombo/received_events",
-    "type": "User",
-    "site_admin": false
-  },
-  {
-    "login": "defunkt",
-    "id": 2,
-    "node_id": "MDQ6VXNlcjI=",
-    "avatar_url": "https://avatars.githubusercontent.com/u/2?v=4",
-    "gravatar_id": "",
-    "url": "https://api.github.com/users/defunkt",
-    "html_url": "https://github.com/defunkt",
-    "followers_url": "https://api.github.com/users/defunkt/followers",
-    "following_url": "https://api.github.com/users/defunkt/following{/other_user}",
-    "gists_url": "https://api.github.com/users/defunkt/gists{/gist_id}",
-    "starred_url": "https://api.github.com/users/defunkt/starred{/owner}{/repo}",
-    "subscriptions_url": "https://api.github.com/users/defunkt/subscriptions",
-    "organizations_url": "https://api.github.com/users/defunkt/orgs",
-    "repos_url": "https://api.github.com/users/defunkt/repos",
-    "events_url": "https://api.github.com/users/defunkt/events{/privacy}",
-    "received_events_url": "https://api.github.com/users/defunkt/received_events",
-    "type": "User",
-    "site_admin": false
-  },
-  {
-    "login": "pjhyett",
-    "id": 3,
-    "node_id": "MDQ6VXNlcjM=",
-    "avatar_url": "https://avatars.githubusercontent.com/u/3?v=4",
-    "gravatar_id": "",
-    "url": "https://api.github.com/users/pjhyett",
-    "html_url": "https://github.com/pjhyett",
-    "followers_url": "https://api.github.com/users/pjhyett/followers",
-    "following_url": "https://api.github.com/users/pjhyett/following{/other_user}",
-    "gists_url": "https://api.github.com/users/pjhyett/gists{/gist_id}",
-    "starred_url": "https://api.github.com/users/pjhyett/starred{/owner}{/repo}",
-    "subscriptions_url": "https://api.github.com/users/pjhyett/subscriptions",
-    "organizations_url": "https://api.github.com/users/pjhyett/orgs",
-    "repos_url": "https://api.github.com/users/pjhyett/repos",
-    "events_url": "https://api.github.com/users/pjhyett/events{/privacy}",
-    "received_events_url": "https://api.github.com/users/pjhyett/received_events",
-    "type": "User",
-    "site_admin": false
-  },
-  {
-    "login": "wycats",
-    "id": 4,
-    "node_id": "MDQ6VXNlcjQ=",
-    "avatar_url": "https://avatars.githubusercontent.com/u/4?v=4",
-    "gravatar_id": "",
-    "url": "https://api.github.com/users/wycats",
-    "html_url": "https://github.com/wycats",
-    "followers_url": "https://api.github.com/users/wycats/followers",
-    "following_url": "https://api.github.com/users/wycats/following{/other_user}",
-    "gists_url": "https://api.github.com/users/wycats/gists{/gist_id}",
-    "starred_url": "https://api.github.com/users/wycats/starred{/owner}{/repo}",
-    "subscriptions_url": "https://api.github.com/users/wycats/subscriptions",
-    "organizations_url": "https://api.github.com/users/wycats/orgs",
-    "repos_url": "https://api.github.com/users/wycats/repos",
-    "events_url": "https://api.github.com/users/wycats/events{/privacy}",
-    "received_events_url": "https://api.github.com/users/wycats/received_events",
-    "type": "User",
-    "site_admin": false
-  },
-  {
-    "login": "ezmobius",
-    "id": 5,
-    "node_id": "MDQ6VXNlcjU=",
-    "avatar_url": "https://avatars.githubusercontent.com/u/5?v=4",
-    "gravatar_id": "",
-    "url": "https://api.github.com/users/ezmobius",
-    "html_url": "https://github.com/ezmobius",
-    "followers_url": "https://api.github.com/users/ezmobius/followers",
-    "following_url": "https://api.github.com/users/ezmobius/following{/other_user}",
-    "gists_url": "https://api.github.com/users/ezmobius/gists{/gist_id}",
-    "starred_url": "https://api.github.com/users/ezmobius/starred{/owner}{/repo}",
-    "subscriptions_url": "https://api.github.com/users/ezmobius/subscriptions",
-    "organizations_url": "https://api.github.com/users/ezmobius/orgs",
-    "repos_url": "https://api.github.com/users/ezmobius/repos",
-    "events_url": "https://api.github.com/users/ezmobius/events{/privacy}",
-    "received_events_url": "https://api.github.com/users/ezmobius/received_events",
-    "type": "User",
-    "site_admin": false
-  },
-  {
-    "login": "ivey",
-    "id": 6,
-    "node_id": "MDQ6VXNlcjY=",
-    "avatar_url": "https://avatars.githubusercontent.com/u/6?v=4",
-    "gravatar_id": "",
-    "url": "https://api.github.com/users/ivey",
-    "html_url": "https://github.com/ivey",
-    "followers_url": "https://api.github.com/users/ivey/followers",
-    "following_url": "https://api.github.com/users/ivey/following{/other_user}",
-    "gists_url": "https://api.github.com/users/ivey/gists{/gist_id}",
-    "starred_url": "https://api.github.com/users/ivey/starred{/owner}{/repo}",
-    "subscriptions_url": "https://api.github.com/users/ivey/subscriptions",
-    "organizations_url": "https://api.github.com/users/ivey/orgs",
-    "repos_url": "https://api.github.com/users/ivey/repos",
-    "events_url": "https://api.github.com/users/ivey/events{/privacy}",
-    "received_events_url": "https://api.github.com/users/ivey/received_events",
-    "type": "User",
-    "site_admin": false
+function Routing() {
+  const { id } = useParams();
+  var currentUser = parseInt(id) + 1;
+  if (!currentUser) {
+    currentUser = 1;
   }
-]*/
+  return (
+    <div className="col mt-5">
+      <a href={"/" + currentUser} className="btn btn-success float-right mb-5">Next Page</a>
+    </div>
+  )
+}
+
+
+export default App;
